@@ -21,6 +21,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email, password, **kwargs):
+        kwargs['is_active'] = False # false for google
         return self._create(email, password, **kwargs)
 
     def create_superuser(self, email, password, **kwargs):
@@ -37,9 +38,11 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=70)
     phone = models.CharField(max_length=13)
     balance = models.IntegerField(default=500)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True) #true for google
     activation_code = models.CharField(max_length=8, null=True)
     
+    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

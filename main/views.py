@@ -1,5 +1,9 @@
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
+from django.db.models import Case, When
+from django.shortcuts import get_object_or_404, redirect
+from rest_framework.decorators import api_view
+from django.views.decorators.cache import cache_page # caching
+from django.utils.decorators import method_decorator #caching
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,6 +12,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAdminUser
 
+from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
+from .models import Restaurant, Post, History
 from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers, OrdersSerializer, OrderUpdateSerializer
 from .models import Restaurant, Post, Orders, OrderUpdate
 from .filters import RestourantFilter, PostFilter
@@ -136,6 +142,35 @@ class PostViewSet(ModelViewSet):
 
 
 
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *a, **k):
+        return super().list(request, *a, **k)
+
+# from django.shortcuts import render
+# def index(request):
+# 	return render(request,'main/index.html')
+
+# @action(['POST'], detail=True)
+@api_view(['POST'])
+def history(request):
+    if request.method == "POST":
+        user = request.user
+        post_id = request.POST['post_id']
+        history = History(user=user, post_id=post_id)
+        history.save()
+
+        return redirect(f"/main/post/{post_id}")
+
+    history = History.objects.filter(user=request.user)
+    ids = []
+    for i in history:
+        ids.append(i.post_id)
+    
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(ids)])
+    post = Post.objects.filter(post_id__in=ids).order_by(preserved)
+    return post
+
+
 class OrdersViewSet(ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
@@ -143,4 +178,5 @@ class OrdersViewSet(ModelViewSet):
 class OrderUpdateViewSet(ModelViewSet):
     queryset = OrderUpdate.objects.all()
     serializer_class = OrderUpdateSerializer
+
 

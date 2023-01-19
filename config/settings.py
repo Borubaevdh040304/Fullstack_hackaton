@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+
+    
+    'drf_api_logger', #logger
 ]
 
 MIDDLEWARE = [
@@ -62,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware', #logger
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -123,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Asia/Bishkek'
 
@@ -202,7 +207,8 @@ CORS_ALLOWED_ORIGINS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-        'allauth.account.auth_backends.AuthenticationBackend',
+     'allauth.account.auth_backends.AuthenticationBackend', 
+
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -220,13 +226,20 @@ SOCIALACCOUNT_PROVIDERS = {
 SITE_ID = 4
 
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
+LOGOUT_REDIRECT_URL = '/accounts/google/login'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
+DRF_API_LOGGER_DATABASE  =  True  #logger
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR/ 'django_cache',
+    }
+}   #caching
 # PAYMENT_MODEL = 'mypaymentapp.models.Payment'
 # djangooauth-375208

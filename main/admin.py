@@ -40,8 +40,8 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Restaurant, RestourantAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(History)
 admin.site.register(Orders)
 admin.site.register(OrderUpdate)
-
 
 
