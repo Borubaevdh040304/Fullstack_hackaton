@@ -9,7 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 from .serializers import PostCommentsSerializer, RestourantCommentSerializer, RatingRestourantSerializer, RestourantFavoritesSerializer
-from .models import PostComments, RestourantComments, RatingRestourant, RestourantFavorites
+from .models import PostComments, RestourantComments, RatingRestourant, RestourantFavorites, Restaurant
 
 from main.permissions import IsAuthorOrReadOnly
 
@@ -39,7 +39,7 @@ class CreateRatingAPIView(APIView):
         ser.is_valid(raise_exception=True)
         lesson_id = request.data.get("lesson")
         if RatingRestourant.objects.filter(author=user, lesson__id=lesson_id).exists():
-            raiting = RatingRestourant.objects.get(author=user, lesson__id=lesson_id)
+            raiting = RatingRestourant.objects.get(author=user, lesson__id=lesson_id) 
             raiting.value = request.data.get("value")
             raiting.save()
         else:
@@ -56,3 +56,9 @@ def favorites_list(request):
     serializer = RestourantFavoritesSerializer(queryset, many=True)
 
     return Response(serializer.data, status=200)
+
+
+# class RecAPIView(APIView):
+#     # permission_classes = [IsAuthenticated]
+
+#     queryset = Re.objects.all()

@@ -1,5 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import cache_page # caching
+from django.utils.decorators import method_decorator #caching
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -120,6 +122,11 @@ class PostViewSet(ModelViewSet):
         serializer.save()
 
         return Response(status=201)
+
+
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *a, **k):
+        return super().list(request, *a, **k)
 
 # from django.shortcuts import render
 # def index(request):

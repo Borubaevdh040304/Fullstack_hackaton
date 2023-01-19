@@ -50,7 +50,7 @@ class Category(models.Model):
 #     subscribe = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE)
 #     restourant = models.ForeignKey(Restaurant, related_name='subscribers', on_delete=models.CASCADE)
 
-        
+
 
 
     

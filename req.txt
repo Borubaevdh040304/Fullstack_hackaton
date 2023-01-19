@@ -18,3 +18,4 @@ pytelegrambotapi
 payments
 
 django-allauth
+drf-api-logger
