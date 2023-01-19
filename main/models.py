@@ -51,7 +51,10 @@ class Category(models.Model):
 #     restourant = models.ForeignKey(Restaurant, related_name='subscribers', on_delete=models.CASCADE)
 
 
-
+class History(models.Model):
+    hist_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_id = models.CharField(max_length=10000000, default="")
 
     
     

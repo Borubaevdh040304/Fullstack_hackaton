@@ -11,5 +11,6 @@ router.register('post', PostViewSet)
 
 urlpatterns =[
     path('', include(router.urls)),
+    path('history/', views.history, name='history'),
     # path('', views.index, name='index.html'),
 ]
