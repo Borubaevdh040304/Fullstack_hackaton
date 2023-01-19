@@ -207,7 +207,8 @@ CORS_ALLOWED_ORIGINS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-        'allauth.account.auth_backends.AuthenticationBackend', 
+     'allauth.account.auth_backends.AuthenticationBackend', 
+
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -222,7 +223,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-SITE_ID = 3
+SITE_ID = 4
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/google/login'
@@ -240,3 +241,5 @@ CACHES = {
         'LOCATION': BASE_DIR/ 'django_cache',
     }
 }   #caching
+# PAYMENT_MODEL = 'mypaymentapp.models.Payment'
+# djangooauth-375208
