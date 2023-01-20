@@ -50,15 +50,14 @@ class Post(models.Model):
 
 
 class Category(models.Model):
-    # restourant_name = models.ForeignKey(Restaurant, related_name='category', on_delete=models.CASCADE)
     cuisine = models.ForeignKey(Restaurant, related_name='rest_category', on_delete=models.SET_NULL, null=True, default="")
     category = models.ForeignKey(Post, related_name='post_categories', on_delete=models.CASCADE, default="")
 
 
 
 class Orders(models.Model):
-    users = models.ForeignKey(User, related_name='users_order', on_delete=models.DO_NOTHING, default="")
-    post_or = models.ForeignKey(Post, related_name='post_order', on_delete=models.DO_NOTHING, default="")
+    users = models.ForeignKey(User, related_name='users_order', on_delete=models.SET_NULL, null=True)
+    post_or = models.ForeignKey(Post, related_name='post_order', on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField(default=0)
     name = models.CharField(max_length=90)
     email = models.CharField(max_length=111)
@@ -72,31 +71,20 @@ class Orders(models.Model):
     
     class Meta:
         verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
+        verbose_name_plural = "Заказ"
 
 
+class History(models.Model):
+    hist_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    post_id = models.CharField(max_length=10000000, default="")
 
-class OrderUpdate(models.Model):
-    order_up = models.ForeignKey(Orders, related_name='post_order', on_delete=models.CASCADE)
-    update_desc = models.CharField(max_length=5000)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.update_desc
-    
     class Meta:
-        verbose_name = "Все заказы"
-        verbose_name_plural = "Все заказы"
-
-
+        verbose_name = "История"
+        verbose_name_plural = "Истории"
 
 # class Subscription(models.Model):
 #     subscribe = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE)
 #     restourant = models.ForeignKey(Restaurant, related_name='subscribers', on_delete=models.CASCADE)
 
-
-class History(models.Model):
-    hist_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post_id = models.CharField(max_length=10000000, default="")
 

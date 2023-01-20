@@ -14,13 +14,12 @@ from rest_framework.permissions import IsAdminUser
 
 from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
 from .models import Restaurant, Post, History
-from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers, OrdersSerializer, OrderUpdateSerializer
-from .models import Restaurant, Post, Orders, OrderUpdate
+from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers, OrdersSerializer
+from .models import Restaurant, Post, Orders
 from .filters import RestourantFilter, PostFilter
 
 from review.models import RestourantFavorites, PostFavorites, PostLike
 
-User=get_object_or_404
 
 
 class RestaurantViewSet(ModelViewSet):
@@ -175,8 +174,4 @@ class OrdersViewSet(ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
     
-class OrderUpdateViewSet(ModelViewSet):
-    queryset = OrderUpdate.objects.all()
-    serializer_class = OrderUpdateSerializer
-
 
