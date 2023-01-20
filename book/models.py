@@ -22,7 +22,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email, password, **kwargs):
-        kwargs['is_active'] = False # false for google
+        # kwargs['is_active'] = False # false for google
         return self._create(email, password, **kwargs)
 
     def create_superuser(self, email, password, **kwargs):
@@ -42,7 +42,6 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True) #true for google
     activation_code = models.CharField(max_length=8, null=True)
     
-    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -50,3 +49,7 @@ class User(AbstractUser):
 
     def create_activation_code(self):
         self.activation_code = get_random_string(8, 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890')
+    
+    class Meta:
+        verbose_name = "Юзер"
+        verbose_name_plural = "Юзеры"
