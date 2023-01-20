@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotAcceptable
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
 from .models import Restaurant, Post, History
@@ -19,8 +19,9 @@ from .models import Restaurant, Post, Orders
 from .filters import RestourantFilter, PostFilter
 
 from review.models import RestourantFavorites, PostFavorites, PostLike
-
-
+from django.contrib.auth import get_user_model
+ 
+User = get_user_model()
 
 class RestaurantViewSet(ModelViewSet):
     queryset = Restaurant.objects.all()
@@ -30,7 +31,7 @@ class RestaurantViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action in ['retrive', 'list', 'search']:
             return []
-        return [IsAdminUser()]
+        return [IsAuthenticated()]
     
 
     @action(['GET'], detail=False)
@@ -71,7 +72,7 @@ class PostViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action in ['retrive', 'list', 'search']:
             return []
-        return [IsAdminUser()]
+        return [IsAuthenticated()]
         
 
 
