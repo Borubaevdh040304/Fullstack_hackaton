@@ -13,7 +13,7 @@ User = get_user_model()
 
 @api_view(['GET'])
 def google_login(request):
-    return Response('Активационная ссылка (для POST запроса): http://localhost:8000/google/activate/', status=200)
+    return Response('Активационная ссылка (для POST запроса): http://35.185.69.40/google/activate/', status=200)
 
 
 @api_view(['POST'])
