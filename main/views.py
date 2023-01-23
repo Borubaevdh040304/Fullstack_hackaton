@@ -63,6 +63,12 @@ class RestaurantViewSet(ModelViewSet):
             RestourantFavorites.objects.create(rest=rest,user=user)
         return Response(status=201)
 
+
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *a, **k):
+        return super().list(request, *a, **k)
+
+
     
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
@@ -145,10 +151,6 @@ class PostViewSet(ModelViewSet):
     @method_decorator(cache_page(60 * 15))
     def list(self, request, *a, **k):
         return super().list(request, *a, **k)
-
-# from django.shortcuts import render
-# def index(request):
-# 	return render(request,'main/index.html')
 
 # @action(['POST'], detail=True)
 @api_view(['POST'])
