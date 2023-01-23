@@ -72,6 +72,15 @@ class Orders(models.Model):
     class Meta:
         verbose_name = "Заказ"
         verbose_name_plural = "Заказ"
+    
+    def save(self, *args, **kwargs):
+        super(Orders, self).save(*args, **kwargs)
+    
+
+def order_post_save(sender, instance, created, **kwargs):
+    pass
+    
+# post
 
 
 class History(models.Model):
