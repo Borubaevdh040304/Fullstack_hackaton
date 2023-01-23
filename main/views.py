@@ -12,7 +12,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
 from .models import Restaurant, Post, History
 from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers, OrdersSerializer
 from .models import Restaurant, Post, Orders
@@ -62,6 +61,12 @@ class RestaurantViewSet(ModelViewSet):
         else:
             RestourantFavorites.objects.create(rest=rest,user=user)
         return Response(status=201)
+
+
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *a, **k):
+        return super().list(request, *a, **k)
+
 
     
 class PostViewSet(ModelViewSet):
@@ -146,10 +151,6 @@ class PostViewSet(ModelViewSet):
     def list(self, request, *a, **k):
         return super().list(request, *a, **k)
 
-# from django.shortcuts import render
-# def index(request):
-# 	return render(request,'main/index.html')
-
 # @action(['POST'], detail=True)
 @api_view(['POST'])
 def history(request):
@@ -174,5 +175,7 @@ def history(request):
 class OrdersViewSet(ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
+     
     
 
+  

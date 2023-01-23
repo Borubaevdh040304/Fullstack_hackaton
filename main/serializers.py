@@ -1,7 +1,5 @@
 from rest_framework.serializers import ModelSerializer
 
-# from rest_framework import serializers
-
 from .models import Restaurant, Post, Category, Orders # Subscription
 
 
@@ -11,13 +9,10 @@ class RestaurantSerializer(ModelSerializer):
         fields = '__all__'
 
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Restaurant):
         rep = super().to_representation(instance)
-        
+        rep['author'] = instance.author
         rep['rating'] = instance.rating
-        # rep['subscribers'] = SubscriberSerializer(instance.subscribers.all(), many=True).data
-        # rep['subscriptions'] = SubscribeSerializer(instance.subscriptions.all(), many=True).data
-
         return rep
 
 
@@ -29,18 +24,12 @@ class PostSerializer(ModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
-        request = self.context.get('request')
-        attrs['user'] = request.user
-
         return attrs
     
     
-    def to_representation(self, instance):
+    def to_representation(self, instance: Post):
         rep = super().to_representation(instance)
-        rep['likes'] = instance.likes.count()
-        rep['restourant'] = CategorySerializers(instance.restourant_name).data
-        rep['cuisine'] = CategorySerializers(instance.cuisine).data
-        rep['restourant'] = RestaurantSerializer(instance.cuisine).data
+        rep['title'] = RestaurantSerializer(instance.title_of_restourant).data
 
         return rep
 
@@ -53,7 +42,8 @@ class CategorySerializers(ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['post'] = PostSerializer(instance.post).data
+        rep['cuisine'] = RestaurantSerializer(instance.cuisine).data
+        rep['category'] = PostSerializer(instance.category).data
         
         return rep
 
