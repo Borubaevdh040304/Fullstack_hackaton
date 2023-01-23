@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
+# from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers
 from .models import Restaurant, Post, History
 from .serializers import RestaurantSerializer, PostSerializer, CategorySerializers, OrdersSerializer
 from .models import Restaurant, Post, Orders
