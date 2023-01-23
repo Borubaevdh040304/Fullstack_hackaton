@@ -179,8 +179,3 @@ class OrdersViewSet(ModelViewSet):
     
 
   
-
-
-
-
-  
