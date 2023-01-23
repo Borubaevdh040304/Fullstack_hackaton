@@ -15,8 +15,8 @@ class Restaurant(models.Model):
     work_time = models.DateTimeField(blank=True, null=True)
     address = models.CharField(max_length=250)
 
-    def __str__(self) -> str:
-        return self.title
+    # def __str__(self) -> str:
+    #     return self.title
     
 
     class Meta:
@@ -41,8 +41,8 @@ class Post(models.Model):
     type = models.CharField(choices=TYPE, max_length=3, default='BRK', verbose_name='Тип')
 
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
     
     class Meta:
         verbose_name = "Продукт"

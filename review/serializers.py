@@ -16,6 +16,12 @@ class RestourantCommentSerializer(ModelSerializer):
 
         return attrs
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['likes'] = instance.likes.count()
+
+        return rep
+
 
 class PostCommentsSerializer(ModelSerializer):
     class Meta:

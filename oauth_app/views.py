@@ -28,3 +28,4 @@ def google_activate(request):
     send_activation_mail(user.email, user.activation_code)
 
     return Response('Mail sent', status=200)
+
