@@ -10,3 +10,7 @@ media/
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+main/migrations/0003_alter_post_title_of_restourant.py
+main/migrations/0003_alter_post_title_of_restourant.py
+main/migrations/0002_alter_restaurant_work_time.py
+main/migrations/0002_alter_restaurant_work_time.py
