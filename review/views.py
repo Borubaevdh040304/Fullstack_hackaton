@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action, api_view
 from rest_framework.views import APIView
@@ -8,8 +9,9 @@ from rest_framework.exceptions import NotAcceptable, NotAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 
 
-from .serializers import PostCommentsSerializer, RestourantCommentSerializer, RatingRestourantSerializer, RestourantFavoritesSerializer
-from .models import PostComments, RestourantComments, RatingRestourant, RestourantFavorites, Restaurant
+from .serializers import PostCommentsSerializer, RestourantCommentSerializer, RatingRestourantSerializer
+from .models import PostComments, RestourantComments, RatingRestourant #, RestourantFavorites, PostFavorites
+# from main.models import Post, Restaurant
 
 from main.permissions import IsAuthorOrReadOnly
 
@@ -37,9 +39,9 @@ class CreateRatingAPIView(APIView):
         user = request.user
         ser = RatingRestourantSerializer(data=request.data, context={"request":request})
         ser.is_valid(raise_exception=True)
-        lesson_id = request.data.get("lesson")
-        if RatingRestourant.objects.filter(author=user, lesson__id=lesson_id).exists():
-            raiting = RatingRestourant.objects.get(author=user, lesson__id=lesson_id) 
+        rest_id = request.data.get("restourant")
+        if RatingRestourant.objects.filter(author=user, lesson__id=rest_id).exists():
+            raiting = RatingRestourant.objects.get(author=user, lesson__id=rest_id) 
             raiting.value = request.data.get("value")
             raiting.save()
         else:
@@ -47,18 +49,31 @@ class CreateRatingAPIView(APIView):
         return Response(status=201)
 
 
-@api_view(['GET'])
-def favorites_list(request):
-    if not request.user.is_authenticated:
-        raise NotAuthenticated(detail='Authentication required')
 
-    queryset = RestourantFavorites.objects.filter(user=request.user)
-    serializer = RestourantFavoritesSerializer(queryset, many=True)
+ 
+# @api_view(['POST'])
+# def favourite_rest(request):
+#     user_id = request.data.get('user')
+#     rest_id =request.data.get('rest')
+#     user = get_object_or_404(User, id = user_id)
+#     rest = get_object_or_404(Restaurant, id = rest_id)
 
-    return Response(serializer.data, status=200)
+#     if RestourantFavorites.objects.filter(rest=rest, user=user).exists():
+#         RestourantFavorites.objects.filter(rest=rest,user=user).delete()
+#     else:
+#         RestourantFavorites.objects.create(rest=rest,user=user)
+#     return Response(status=201)
 
 
-# class RecAPIView(APIView):
-#     # permission_classes = [IsAuthenticated]
+# @api_view(['POST'])
+# def favourite_post(request):
+#     user_id = request.data.get('user')
+#     post_id =request.data.get('post')
+#     user = get_object_or_404(User, id = user_id)
+#     post = get_object_or_404(Post, id = post_id)
 
-#     queryset = Re.objects.all()
+#     if PostFavorites.objects.filter(post=post, user=user).exists():
+#         PostFavorites.objects.filter(post=post,user=user).delete()
+#     else:
+#         PostFavorites.objects.create(post=post,user=user)
+#     return Response(status=201)

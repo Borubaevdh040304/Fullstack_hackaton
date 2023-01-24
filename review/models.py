@@ -14,6 +14,10 @@ class RestourantComments(models.Model):
     pestouran = models.ForeignKey(Restaurant, related_name='restcomments', on_delete=models.CASCADE)
 
 
+    def __str__(self):
+        return f'{self.user} -> {self.pestouran}'
+
+
 class PostComments(models.Model):
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -22,14 +26,24 @@ class PostComments(models.Model):
     post = models.ForeignKey(Post, related_name='postcomments', on_delete=models.CASCADE)
 
 
+    def __str__(self):
+        return f'{self.user} -> {self.post}'
+
+
 class RestourantFavorites(models.Model):
     user = models.ForeignKey(User, related_name='pestourant_favorite' , on_delete=models.CASCADE)
     restourant = models.ForeignKey(Restaurant, related_name='favorites', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.user} -> {self.restourant}'
+
 
 class PostFavorites(models.Model):
-    user = models.ForeignKey(User, related_name='post' , on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='post_favorites' , on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='favorites', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user}-> {self.post}'
 
 
 class RatingRestourant(models.Model):

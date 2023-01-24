@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h2>{{room}} - DjChat</h2>
+
+<div id="display">
+
+<!-- <div class="container darker">
+  <b>Tom</b><p>Hello Everyone, How Are You Guys Doing?</p>
+  <span class="time-left">20th, April 2021</span>
+</div> -->
+
+</div>
+
+<script>
+$(document).ready(function(){
+
+setInterval(function(){
+    $.ajax({
+        type: 'GET',
+        url : "/chat/getMessages/{{room}}/",
+        success: function(response){
+            console.log(response);
+            $("#display").empty();
+            for (var key in response.messages)
+            {
+                var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                $("#display").append(temp);
+            }
+        },
+        error: function(response){
+            alert('An error occured')
+        }
+    });
+},1000);
+})
+</script>
+
+
+<div class="container">
+    <style>
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    }
+    </style>
+
+    <form id="post-form">
+        {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{username}}"/>
+        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+        <input type="text" name="message" id="message" width="100px" />
+        <input type="submit" value="Send">
+    </form>
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+  $(document).on('submit','#post-form',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url:'/chat/send',
+      data:{
+          username:$('#username').val(),
+          room_id:$('#room_id').val(),
+          message:$('#message').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+         //alert(data)
+      }
+    });
+    document.getElementById('message').value = ''
+  });
+</script>
+
+</html>
+
+
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git add .
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git commit -m 'k'
+[nuraiym 7834c29] k
+ 6 files changed, 68 insertions(+), 3 deletions(-)
+ create mode 100644 book/migrations/0007_alter_user_options_alter_user_is_active.py
+ create mode 100644 django_cache/08527937163dc389f4ea42acf38594cb.djcache
+ create mode 100644 django_cache/b786300b9778d26096321961e9173191.djcache
+ create mode 100644 django_cache/d8041b44ab5855e3dca1ed654e479f02.djcache
+ create mode 100644 main/forms.py
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git push origin nuraiym 
+To github.com:Borubaevdh040304/Restaurant.git
+ ! [rejected]        nuraiym -> nuraiym (fetch first)
+error: failed to push some refs to 'github.com:Borubaevdh040304/Restaurant.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git pull origin master
+remote: Enumerating objects: 47, done.
+remote: Counting objects: 100% (47/47), done.
+remote: Compressing objects: 100% (17/17), done.
+remote: Total 17 (delta 13), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (17/17), 2.99 KiB | 1.50 MiB/s, done.
+From github.com:Borubaevdh040304/Restaurant
+ * branch            master     -> FETCH_HEAD
+   602b9ae..87c8c7a  master     -> origin/master
+Auto-merging book/models.py
+CONFLICT (content): Merge conflict in book/models.py
+Automatic merge failed; fix conflicts and then commit the result.
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git add .
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git commit -m 'k'
+[nuraiym bd7709f] k
+(venv) nuraiym@nuraiym:~/nu/Restaurant$ git push origin nuraiym 
+Enumerating objects: 28, done.
+Counting objects: 100% (28/28), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (17/17), done.
