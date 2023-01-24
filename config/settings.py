@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'book',
     'main',
     'review',
+    'chat',
 
     'allauth',
     'allauth.account',
@@ -242,3 +243,13 @@ CACHES = {
 }   #caching
 # PAYMENT_MODEL = 'mypaymentapp.models.Payment'
 # djangooauth-375208
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
