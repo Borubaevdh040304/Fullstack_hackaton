@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from .models import PostComments, RestourantComments, RatingRestourant, RestourantFavorites
+from .models import PostComments, RestourantComments, RatingRestourant, RestourantFavorites, PostFavorites
 
 
 class RestourantCommentSerializer(ModelSerializer):
@@ -16,11 +16,11 @@ class RestourantCommentSerializer(ModelSerializer):
 
         return attrs
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep['likes'] = instance.likes.count()
+    # def to_representation(self, instance):
+    #     rep = super().to_representation(instance)
+    #     rep['likes'] = instance.likes.count()
 
-        return rep
+    #     return rep
 
 
 class PostCommentsSerializer(ModelSerializer):
@@ -62,3 +62,19 @@ class RestourantFavoritesSerializer(ModelSerializer):
     class Meta:
         model = RestourantFavorites
         fields = ('restourant',)
+
+    def validate(self, attrs):
+        attrs =  super().validate(attrs)
+        request = self.context.get('request')
+        return attrs(request)
+
+
+class PostFavoritesSerializer(ModelSerializer):
+    class Meta:
+        model = PostFavorites
+        fields = ('restourant',)
+
+    def validate(self, attrs):
+        attrs =  super().validate(attrs)
+        request = self.context.get('request')
+        return attrs(request)
