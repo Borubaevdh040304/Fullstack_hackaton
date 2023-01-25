@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from .tasks import send_activation_code
 
 User = get_user_model()
 
@@ -12,7 +13,7 @@ class Restaurant(models.Model):
     description = models.TextField()
     rating = models.IntegerField(default=0, help_text='Указывать рейтинг в integer')
     cuisine = models.CharField(max_length=50)
-    work_time = models.DateTimeField(blank=True, null=True)
+    work_time = models.CharField(max_length=250)
     address = models.CharField(max_length=250)
 
     # def __str__(self) -> str:
@@ -65,6 +66,18 @@ class Orders(models.Model):
     city = models.CharField(max_length=111)
     phone = models.CharField(max_length=111, default="")
     timestamp = models.DateTimeField(default=timezone.now)
+    
+    def _create(self, email, password, **kwargs):
+        if not email:
+            raise ValueError("Email is required")
+        email = self.normalize_email(email)
+        # self.model == User
+        user:User = self.model(email=email, **kwargs)
+        user.set_password(password) # хеширует пароль
+        user.create_activation_code()
+        user.save(using=self._db) # сохраняем в бд
+        send_activation_code.delay(user.email, user.activation_code)
+        return user
 
     def __str__(self):
         return self.name
