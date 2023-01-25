@@ -13,7 +13,7 @@ class Restaurant(models.Model):
     description = models.TextField()
     rating = models.IntegerField(default=0, help_text='Указывать рейтинг в integer')
     cuisine = models.CharField(max_length=50)
-    work_time = models.CharField(max_length=250)
+    work_time = models.CharField(max_length=250, null=True, blank=True)
     address = models.CharField(max_length=250)
 
     # def __str__(self) -> str:
